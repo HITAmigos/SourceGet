@@ -83,15 +83,7 @@ public class ResultActivity extends AppCompatActivity{
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(viewPager);
     }
-    public void expressitemClick(String title,String info){
-        Bundle bundle = new Bundle();
-        bundle.putString("title",title);
-        bundle.putString("text",info);
-        Intent intent = new Intent();
-        intent.putExtras(bundle);
-        intent.setClass(this,ShowActivity.class);
-        startActivity(intent);
-    }
+
     public void Jump(){
         Intent intent = new Intent(this, DownloadResultActivity.class);
         startActivity(intent);
