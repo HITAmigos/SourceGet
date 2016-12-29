@@ -7,7 +7,6 @@
 package hitamigos.sourceget;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -72,11 +71,6 @@ public class ResultActivity extends AppCompatActivity{
                     Toast.makeText(getApplicationContext(),
                             "正在下载"+title+"！",
                             Toast.LENGTH_SHORT).show();
-                    //使用迅雷打开
-                    String link = "";
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-                    intent.addCategory("android.intent.category.DEFAULT");
-                    startActivity(intent);
                 }
             });
              views.add(listView);

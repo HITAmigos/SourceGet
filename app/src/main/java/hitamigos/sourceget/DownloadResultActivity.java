@@ -6,10 +6,7 @@
 
 package hitamigos.sourceget;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -96,13 +93,6 @@ public class DownloadResultActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),
                         "正在打开"+title+"……",
                         Toast.LENGTH_SHORT).show();
-                Intent it = new Intent(Intent.ACTION_VIEW);
-                Uri uri =Uri.parse("file:///sdcard/song.mp3");
-                it.setDataAndType(uri,"audio/mp3");
-                startActivity(it);
-                Uri url =Uri.withAppendedPath(MediaStore.Audio.Media.INTERNAL_CONTENT_URI,"1");
-                it = new Intent(Intent.ACTION_VIEW,url);
-                startActivity(it);
             }
         });
         views.add(listView);
