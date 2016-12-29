@@ -14,7 +14,7 @@ import java.util.List;
 
 public class MyPagerAdapter extends PagerAdapter {
     List<View> views;
-    String[] tabTitle = {"视频","音乐","新闻"};
+    String[] tabTitle = {"视频","音乐","图片"};
     public MyPagerAdapter(List<View> views) {
         this.views = views;
     }

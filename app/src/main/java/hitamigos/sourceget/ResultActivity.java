@@ -6,15 +6,22 @@
 
 package hitamigos.sourceget;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -24,6 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import hitamigos.picure.util.ImageLoader;
+import hitamigos.picure.util.Search;
 import hitamigos.sourceget.adapter.MyPagerAdapter;
 
 
@@ -31,19 +40,25 @@ public class ResultActivity extends AppCompatActivity{
     private Intent intent;
     List<View> views=new ArrayList<>();
     private ListView listView=null;
-    public static final String PAR_KEY = "par_key";
-    public static final String PAR_TYPE = "par_type";
     public static String message;
+
+    private ArrayList<String> list = new ArrayList<String>();
+
+    private GridView gridView;
+    private String[] urlArray;
+    private ImageLoader mImageLoader;
+    private Handler UIHandler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.result);
-
+        mImageLoader = ImageLoader.getInstance(3, ImageLoader.Type.LIFO);
         intent = getIntent();
         String mess = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
         if(mess != null){
             message = mess;
         }
+
         for (int i=0;i<2;i++){
             listView=new ListView(this);
             List<Map<String, Object>> list=new ArrayList<>();
@@ -75,7 +90,13 @@ public class ResultActivity extends AppCompatActivity{
             });
              views.add(listView);
         }
-
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.picture, null);
+        gridView = (GridView) view.findViewById(R.id.id_gridview);
+        Search search = new Search(message, UIHandler);
+        urlArray = search.GetUrl().toString().split("\n");
+        gridView.setAdapter(new ListImgItemAdapetr(ResultActivity.this, 0, urlArray));
+        views.add(view);
         ViewPager viewPager= (ViewPager) findViewById(R.id.id_vp);
         MyPagerAdapter myPagerAdapter=new MyPagerAdapter(views);
         viewPager.setAdapter(myPagerAdapter);
@@ -105,5 +126,26 @@ public class ResultActivity extends AppCompatActivity{
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+/*
+  图片
+ */
+
+    private class ListImgItemAdapetr extends ArrayAdapter<String> {
+        public ListImgItemAdapetr(Context context, int resouce, String[] datas) {
+            super(ResultActivity.this, 0, datas);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = ResultActivity.this.getLayoutInflater().inflate(R.layout.item_fragment_list_imgs, parent, false);
+            }
+            ImageView imageView = (ImageView) convertView.findViewById(R.id.id_img);
+            imageView.setImageResource(R.drawable.pictures_no);
+            mImageLoader.loadImage(getItem(position), imageView, true);
+            return convertView;
+        }
     }
 }
