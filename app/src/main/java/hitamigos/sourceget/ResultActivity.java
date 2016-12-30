@@ -23,18 +23,25 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.aspsine.multithreaddownload.demo.ui.activity.AppListActivity;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import booksearch.activities.BookDetailActivity;
 import booksearch.adapters.BookAdapter;
+import booksearch.models.Book;
 import booksearch.net.BookClient;
 import hitamigos.picure.util.ImageLoader;
 import hitamigos.picure.util.Search;
@@ -47,10 +54,8 @@ public class ResultActivity extends AppCompatActivity{
     private ListView listView=null;
     public static String message;
     public static final String BOOK_DETAIL_KEY = "book";
-    private ListView lvBooks;
     private BookAdapter bookAdapter;
     private BookClient client;
-    private ProgressBar progress;
     private ArrayList<String> list = new ArrayList<String>();
 
     private GridView gridView;
@@ -106,6 +111,29 @@ public class ResultActivity extends AppCompatActivity{
         urlArray = search.GetUrl().toString().split("\n");
         gridView.setAdapter(new ListImgItemAdapetr(ResultActivity.this, 0, urlArray));
         views.add(view);
+
+        listView=new ListView(this);
+
+        ArrayList<Book> aBooks = new ArrayList<Book>();
+        fetchBooks(message);
+        // initialize the adapter
+        bookAdapter = new BookAdapter(this, aBooks);
+        // attach the adapter to the ListView
+        listView.setAdapter(bookAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Launch the detail view passing book as an extra
+                Intent intent = new Intent(ResultActivity.this, BookDetailActivity.class);
+                intent.putExtra(BOOK_DETAIL_KEY, bookAdapter.getItem(position));
+                startActivity(intent);
+            }
+        });
+        views.add(listView);
+
+
+
+
         ViewPager viewPager= (ViewPager) findViewById(R.id.id_vp);
         MyPagerAdapter myPagerAdapter=new MyPagerAdapter(views);
         viewPager.setAdapter(myPagerAdapter);
@@ -113,6 +141,47 @@ public class ResultActivity extends AppCompatActivity{
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(viewPager);
     }
+
+    // Executes an API call to the OpenLibrary search endpoint, parses the results
+    // Converts them into an array of book objects and adds them to the adapter
+    private void fetchBooks(String query) {
+        // Show progress bar before making network request
+        client = new BookClient();
+        client.getBooks(query, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    // hide progress bar
+                    JSONArray docs = null;
+                    if(response != null) {
+                        // Get the docs json array
+                        docs = response.getJSONArray("docs");
+                        // Parse json array into array of model objects
+                        final ArrayList<Book> books = Book.fromJson(docs);
+                        // Remove all books from the adapter
+                        bookAdapter.clear();
+                        // Load model objects into the adapter
+                        for (Book book : books) {
+                            bookAdapter.add(book); // add book through the adapter
+                        }
+                        bookAdapter.notifyDataSetChanged();
+                    }
+                } catch (JSONException e) {
+                    // Invalid JSON format, show appropriate error.
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            }
+        });
+    }
+
+
+
+
+
 
     public void Jump(){
         Intent in = new Intent(this, AppListActivity.class);

@@ -70,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 intent = new Intent(this,hitamigos.sourceget.DownloadResultActivity.class);
                 break;
+            case 3:
+                intent = new Intent(this,hitamigos.search.SearchActivity.class);
+                break;
             default:
                 break;
         }
@@ -81,6 +84,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.search);
         initSpeech();
         EditText editText = (EditText)findViewById(R.id.edit_message);
+//        editText.setOnClickListener(new Button.OnClickListener(){//创建监听
+//            public void onClick(View v) {
+//                Jump(3);
+//            }
+//        });
+
         editText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {

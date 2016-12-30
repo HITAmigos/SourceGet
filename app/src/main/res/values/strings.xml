@@ -21,5 +21,6 @@
     <string name="Complete">完成！</string>
     <string name="title_activity_app_detail">详细信息</string>
     <string name="title_activity_app">正在下载……</string>
-
+<string name="title_activity_book_detail">书籍详细信息</string>
+    <string name="search_hint">请输入内容</string>
 </resources>
