@@ -6,10 +6,12 @@ android {
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "hitamigos.sourceget"
-        minSdkVersion 11
+        minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
     buildTypes {
         release {
@@ -42,7 +44,11 @@ dependencies {
     compile files('libs/commons-collections-3.1.jar')
     compile files('libs/commons-lang.jar')
     compile files('libs/ezmorph-1.0.6.jar')
+    compile files('libs/zxing-2.2-core.jar')
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile project(':library')
+    compile files('libs/eventbus-3.0.0.jar')
+    compile 'org.xutils:xutils:3.3.22'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha1'
 }

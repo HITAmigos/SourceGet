@@ -6,8 +6,11 @@
 
 package hitamigos.sourceget;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -18,6 +21,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.RecognizerListener;
@@ -36,8 +41,16 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import hitamigos.sourceget.speak.JsonParser;
+import pw.h57.booksearcher.BookAPI;
+import pw.h57.booksearcher.BookInfo;
+import pw.h57.booksearcher.BookInfoDetailActivity;
+import pw.h57.booksearcher.NetResponse;
+import pw.h57.booksearcher.Utils;
+
 public class MainActivity extends AppCompatActivity {
     private String speak;
+    private ProgressDialog mProgressDialog;
+    private DownloadHandler mHandler = new DownloadHandler(this);
     public String getSpeak(){
         return speak;
     }
@@ -68,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 intent = new Intent(this,hitamigos.sourceget.activity.MainActivity.class);
                 break;
             case 2:
-                intent = new Intent(this,hitamigos.sourceget.DownloadResultActivity.class);
+                intent = new Intent(this,cn.hufeifei.mediaplayer.activity.MainActivity.class);
                 break;
             case 3:
                 intent = new Intent(this,hitamigos.search.SearchActivity.class);
@@ -115,6 +128,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
+            case R.id.scan:
+                startScanner();
+                break;
             case R.id.news:
                 Toast.makeText(MainActivity.this, ""+"正在前往新闻页！", Toast.LENGTH_SHORT).show();
                 Jump(1);
@@ -127,6 +143,88 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 启动第三方库ZXing，进行条码扫描
+     */
+    private void startScanner() {
+        IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
+        integrator.initiateScan();
+    }
+
+    /**
+     * 获取结果 获取ISBN，并启动线程进行文件下载
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode,
+                resultCode, data);
+        if ((result == null) || (result.getContents() == null)) {
+            Log.v(Utils.TAG, "User cancel scan by pressing back hardkey.");
+            return;
+        }
+        // 因为现在需要耗时，为了更好的用户体现，显示进度条，进行提示。
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage(getString(R.string.communicating));
+        mProgressDialog.show();
+        // 启动下载线程
+        DownloadThread thread = new DownloadThread(BookAPI.URL_ISBN_BASE
+                + result.getContents() + "?fields=id,title,image,author,publisher,pubdate,isbn13,summary");
+        thread.start();
+    }
+
+    private class DownloadThread extends Thread {
+        private String mURL;
+
+        public DownloadThread(String url) {
+            super();
+            mURL = url;
+        }
+
+        @Override
+        public void run() {
+            Message msg = Message.obtain();
+            msg.obj = Utils.download(mURL);
+            mHandler.sendMessage(msg);
+        }
+    }
+
+    private static class DownloadHandler extends Handler {
+        private MainActivity mActivity;
+
+        public DownloadHandler(MainActivity activity) {
+            super();
+            mActivity = activity;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if ((msg.obj == null) || (mActivity.mProgressDialog == null)
+                    || (!mActivity.mProgressDialog.isShowing())) {
+                return;
+            }
+            mActivity.mProgressDialog.dismiss();
+            NetResponse response = (NetResponse) msg.obj;
+            if (response.getmCode() != BookAPI.RESPONSE_CODE_SUCCEED){
+                Toast.makeText(
+                        mActivity,
+                        "[" + response.getmCode() + "]:"
+                                + "抱歉，没有找到相关图书！", Toast.LENGTH_LONG)
+                        .show();
+            } else {
+                mActivity.startBookInfoDetailActivity((BookInfo) response
+                        .getmMessage());
+            }
+        }
+    }
+    private void startBookInfoDetailActivity(BookInfo bookInfo){
+        if(bookInfo == null){
+            return;
+        }
+        Intent intent = new Intent(this,BookInfoDetailActivity.class);
+        intent.putExtra(BookInfo.class.getName(), bookInfo);
+        startActivity(intent);
     }
     /*
     语音搜索

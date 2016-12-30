@@ -163,7 +163,7 @@ public class DownloadService extends Service {
         @Override
         public void onStarted() {
             L.i(TAG, "onStart()");
-            mBuilder.setSmallIcon(R.mipmap.ic_launcher)
+            mBuilder.setSmallIcon(R.drawable.currents)
                     .setContentTitle(mAppInfo.getName())
                     .setContentText("Init Download")
                     .setProgress(100, 0, true)

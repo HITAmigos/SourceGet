@@ -33,7 +33,6 @@ public class SearchActivity extends Activity {
         searchTextView.addTextChangedListener(new TextWatcher(){
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -47,7 +46,6 @@ public class SearchActivity extends Activity {
             }
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
         searchTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {

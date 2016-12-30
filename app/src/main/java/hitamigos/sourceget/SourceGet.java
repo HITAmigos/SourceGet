@@ -16,12 +16,35 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import org.xutils.x;
+
 import java.io.File;
 
-
+import cn.hufeifei.mediaplayer.service.MusicPlayService;
 public class SourceGet extends Application {
     private static Context sContext;
+    public MusicPlayService getMusicService() {
+        return musicService;
+    }
 
+    public void setMusicService(MusicPlayService musicService) {
+        this.musicService = musicService;
+    }
+
+    private MusicPlayService musicService;
+
+
+    public boolean isMusicPlayed() {
+        return isMusicPlayed;
+    }
+
+    public void setMusicPlayed(boolean musicPlayed) {
+        isMusicPlayed = musicPlayed;
+    }
+
+    //用户判断视频播放之前是否播放音乐了，
+    // 如果播放了音乐，则恢复之前播放的音乐
+    private boolean isMusicPlayed;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -29,6 +52,8 @@ public class SourceGet extends Application {
         sContext = getApplicationContext();
         initDownloader();
         CrashHandler.getInstance(sContext);
+        x.Ext.init(this);
+        // 允许直接访问文件
     }
     private void initImageLoader(Context context) {
         File cacheDir = StorageUtils.getCacheDirectory(context);
