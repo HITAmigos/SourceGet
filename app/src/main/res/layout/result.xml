@@ -20,7 +20,7 @@
         app:tabTextColor="#FF000000"
         android:layout_width="match_parent"
         app:tabTextAppearance="@style/TextAppearance.AppCompat"
-        android:background="#32c1d4">
+        android:background="@color/light_toolbar">
     </android.support.design.widget.TabLayout>
 
     <android.support.v4.view.ViewPager

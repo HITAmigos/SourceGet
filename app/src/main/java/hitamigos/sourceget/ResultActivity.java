@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
@@ -33,6 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import booksearch.adapters.BookAdapter;
+import booksearch.net.BookClient;
 import hitamigos.picure.util.ImageLoader;
 import hitamigos.picure.util.Search;
 import hitamigos.sourceget.adapter.MyPagerAdapter;
@@ -43,7 +46,11 @@ public class ResultActivity extends AppCompatActivity{
     List<View> views=new ArrayList<>();
     private ListView listView=null;
     public static String message;
-
+    public static final String BOOK_DETAIL_KEY = "book";
+    private ListView lvBooks;
+    private BookAdapter bookAdapter;
+    private BookClient client;
+    private ProgressBar progress;
     private ArrayList<String> list = new ArrayList<String>();
 
     private GridView gridView;
