@@ -26,6 +26,8 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.aspsine.multithreaddownload.demo.ui.activity.AppListActivity;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -106,8 +108,10 @@ public class ResultActivity extends AppCompatActivity{
     }
 
     public void Jump(){
-        Intent intent = new Intent(this, DownloadResultActivity.class);
-        startActivity(intent);
+        Intent in = new Intent(this, AppListActivity.class);
+        in.putExtra("EXTRA_TYPE", AppListActivity.TYPE.TYPE_LISTVIEW);
+        startActivity(in);
+        System.out.println("前往下载页");
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){

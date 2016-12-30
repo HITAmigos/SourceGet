@@ -13,4 +13,13 @@
     <string name="message">下载进度：</string>
     <string name="news">欢迎来到新闻页！</string>
     <string name="newsdetails">详细新闻</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Download">下载</string>
+    <string name="Error">出错啦！</string>
+    <string name="Complete">完成！</string>
+    <string name="title_activity_app_detail">详细信息</string>
+    <string name="title_activity_app">正在下载……</string>
+
 </resources>

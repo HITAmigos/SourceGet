@@ -40,11 +40,13 @@
         android:icon="@drawable/currents"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+        <service android:name="com.aspsine.multithreaddownload.demo.service.DownloadService"/>
         <activity android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
@@ -75,6 +77,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity"/>
             </activity>
+        <activity
+            android:name="com.aspsine.multithreaddownload.demo.ui.activity.AppListActivity"
+            android:label="@string/title_activity_app">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".ResultActivity"/>
+        </activity>
+        <activity
+            android:name="com.aspsine.multithreaddownload.demo.ui.activity.AppDetailActivity"
+            android:label="@string/title_activity_app_detail">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.aspsine.multithreaddownload.demo.ui.activity.AppListActivity"/>
+        </activity>
     </application>
 
 </manifest>
