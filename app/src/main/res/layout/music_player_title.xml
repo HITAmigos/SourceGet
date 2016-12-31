@@ -42,13 +42,4 @@
             android:textColor="#fff"
             android:textSize="16sp"/>
     </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/music_btn_more"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        android:paddingBottom="15dp"
-        android:paddingTop="15dp"
-        android:src="@drawable/media_btn_more"/>
 </LinearLayout>

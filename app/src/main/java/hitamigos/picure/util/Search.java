@@ -46,8 +46,6 @@ public class Search {
     private Handler handler;
     private static final int DEAFULT_THREAD_COUNT = 3;
 
-
-
     private int count = 0;
 
     public Search(String word, Handler handler) {
@@ -88,7 +86,6 @@ public class Search {
     private void Union(StringBuilder builder) {
         current++;
         Urlbuilder.append(builder.toString());
-
     }
 
     public static void sop(Object obj) {
@@ -106,10 +103,7 @@ public class Search {
             mSemapthoreThreadPool.release();
         }
         while (current < 3) {
-
         }
-
-
         return Urlbuilder;
 
     }
@@ -212,9 +206,7 @@ public class Search {
                 @Override
                 public void run() {
                     String finalURL;
-
                     String url = "http://pic.sogou.com/pics?query=" + word + "&w=05009900&p=40030500&_asf=pic.sogou.com&_ast=1467681830&sc=index&sut=4150&sst0=1467681830162";
-
                     Document document;
                     try {
                         document = Jsoup

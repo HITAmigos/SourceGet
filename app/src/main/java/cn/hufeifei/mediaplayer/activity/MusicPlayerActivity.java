@@ -74,9 +74,6 @@ public class MusicPlayerActivity extends Activity implements ServiceConnection {
     @ViewInject(R.id.music_artist)
     private TextView musicArtist;
 
-    @ViewInject(R.id.music_btn_more)
-    private ImageButton musicBtnMore;
-
     @ViewInject(R.id.music_viewPager)
     private ViewPager musicViewPager;
 
@@ -426,7 +423,6 @@ public class MusicPlayerActivity extends Activity implements ServiceConnection {
 
     @Event(value = {                //使用xUtils注入事件
             R.id.music_btn_return,  //返回按钮
-            R.id.music_btn_more,    //更多内容
             R.id.music_btn_restart, //
             R.id.music_btn_prev,    //上一曲按钮
             R.id.music_btn_continue,//暂停或继续按钮
@@ -436,8 +432,6 @@ public class MusicPlayerActivity extends Activity implements ServiceConnection {
     private void onClick(View view) {
         if (view == musicBtnReturn) {
             this.finish();
-        } else if (view == musicBtnMore) {
-
         } else if (view == musicBtnRestart) {
         } else if (view == musicBtnPrev) {
             musicService.prev();

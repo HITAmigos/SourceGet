@@ -11,11 +11,10 @@
     <GridView
         android:id="@+id/id_gridview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:horizontalSpacing="3dp"
         android:numColumns="3"
         android:layout_marginTop="20dp"
         android:verticalSpacing="3dp">
-
     </GridView>
 </LinearLayout>

@@ -182,7 +182,6 @@ public class ImageLoader {
         } else {
             addTask(buildTask(path, imageView, isFromNet));
         }
-
     }
     /**
      * 根据传入的参数，新建一个任务

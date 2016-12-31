@@ -282,9 +282,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ResultActivity"/>
-
         </activity>
-
         <!-- 音乐播放器界面 -->
         <activity
             android:name="cn.hufeifei.mediaplayer.activity.MusicPlayerActivity"
@@ -295,6 +293,7 @@
 
         <activity
             android:name="pw.h57.booksearcher.BookInfoDetailActivity"
+            android:label="@string/bookname"
             android:screenOrientation="portrait"> <!-- 将Activity设置为只能纵屏显示 -->
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
@@ -302,10 +301,18 @@
         </activity>
         <activity
             android:name="pw.h57.booksearcher.BookComPriceActivity"
+            android:label="@string/bookdetails"
             android:screenOrientation="portrait"> <!-- 将Activity设置为只能纵屏显示 -->
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="pw.h57.booksearcher.BookComPriceActivity"/>
+        </activity>
+        <activity
+            android:name="hitamigos.alonepicture"
+            android:label="@string/picturedetails"> <!-- 将Activity设置为只能纵屏显示 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="pw.h57.booksearcher.BookComPriceActivity"/>
         </activity>
     </application>
 </manifest>

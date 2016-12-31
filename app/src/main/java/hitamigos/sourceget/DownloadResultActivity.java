@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-
 public class DownloadResultActivity extends AppCompatActivity {
     private ListView listView=null;
     @Override

@@ -41,4 +41,8 @@
 
     <string name="book_detail_summary_title">内容介绍</string>
     <string name="book_search_price">比价查询</string>
+    <string name="bookname">书籍信息</string>
+    <string name="bookdetails">比价查询</string>
+    <string name="picturedetails">图片详情</string>
+
 </resources>
