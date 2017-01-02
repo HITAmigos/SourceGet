@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -14,16 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.aspsine.multithreaddownload.DownloadInfo;
-import com.aspsine.multithreaddownload.DownloadManager;
-import com.aspsine.multithreaddownload.demo.DataSource;
 import com.aspsine.multithreaddownload.demo.entity.AppInfo;
 import com.aspsine.multithreaddownload.demo.listener.OnItemClickListener;
 import com.aspsine.multithreaddownload.demo.service.DownloadService;
 import com.aspsine.multithreaddownload.demo.ui.adapter.ListViewAdapter;
 import com.aspsine.multithreaddownload.demo.util.Utils;
+import com.gewaradown.DownloadInfo;
+import com.gewaradown.DownloadManager;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -39,7 +41,7 @@ public class ListViewFragment extends Fragment implements OnItemClickListener<Ap
     @Bind(R.id.listView)
     ListView listView;
 
-    private List<AppInfo> mAppInfos;
+    private static List<AppInfo> mAppInfos = new ArrayList<AppInfo>();
     private ListViewAdapter mAdapter;
 
     private File mDownloadDir;
@@ -56,13 +58,23 @@ public class ListViewFragment extends Fragment implements OnItemClickListener<Ap
         mDownloadDir = new File(Environment.getExternalStorageDirectory(), "Download");
         mAdapter = new ListViewAdapter();
         mAdapter.setOnItemClickListener(this);
-        mAppInfos = DataSource.getInstance().getData();
-        for (AppInfo info : mAppInfos) {
+        SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/hitamigos.sourceget/databases/downloadinfo.db", null, SQLiteDatabase.OPEN_READONLY);
+        Cursor cur = db.rawQuery("select * from download",null);
+        while(cur.moveToNext()){
+            String id =(cur.getString(cur.getColumnIndex("id")));
+            String title = (cur.getString(cur.getColumnIndex("title")));
+            String url = cur.getString(cur.getColumnIndex("link"));
+            String   img ="http://www.meng.uno/music.png";
+            AppInfo ai =new AppInfo(id,title,img,url);
+            mAppInfos.add(ai);
+        }
+        for (AppInfo info : mAppInfos){
             DownloadInfo downloadInfo = DownloadManager.getInstance().getDownloadInfo(info.getUrl());
-            if (downloadInfo != null) {
+            if (downloadInfo != null){
                 info.setProgress(downloadInfo.getProgress());
                 info.setDownloadPerSize(Utils.getDownloadPerSize(downloadInfo.getFinished(), downloadInfo.getLength()));
                 info.setStatus(AppInfo.STATUS_PAUSED);
+                download(Integer.parseInt(info.getId()), info.getUrl(), info);
             }
         }
     }
@@ -100,9 +112,9 @@ public class ListViewFragment extends Fragment implements OnItemClickListener<Ap
         if (appInfo.getStatus() == AppInfo.STATUS_DOWNLOADING || appInfo.getStatus() == AppInfo.STATUS_CONNECTING) {
             pause(appInfo.getUrl());
         } else if (appInfo.getStatus() == AppInfo.STATUS_COMPLETE) {
-            install(appInfo);
+           // install(appInfo);
         } else if (appInfo.getStatus() == AppInfo.STATUS_INSTALLED) {
-            unInstall(appInfo);
+          //  unInstall(appInfo);
         } else {
             download(position, appInfo.getUrl(), appInfo);
         }
@@ -134,7 +146,7 @@ public class ListViewFragment extends Fragment implements OnItemClickListener<Ap
     }
 
     private void install(AppInfo appInfo) {
-        Utils.installApp(getActivity(), new File(mDownloadDir, appInfo.getName() + ".apk"));
+        Utils.installApp(getActivity(), new File(mDownloadDir, appInfo.getName()));
     }
 
     private void unInstall(AppInfo appInfo) {

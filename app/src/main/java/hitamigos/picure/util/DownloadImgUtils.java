@@ -32,7 +32,6 @@ public class DownloadImgUtils {
 		try {
 			URL url = new URL(urlStr);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
 			is = conn.getInputStream();
 			fos = new FileOutputStream(file);
 			byte[] buf = new byte[512];

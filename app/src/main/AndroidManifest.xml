@@ -240,14 +240,6 @@
                 android:value=".MainActivity"/>
         </activity>
         <activity
-            android:name=".DownloadResultActivity"
-            android:label="@string/downloaddetails"
-            android:parentActivityName=".MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
-        </activity>
-        <activity
             android:name=".activity.MainActivity"
             android:label="@string/news"
             android:parentActivityName=".MainActivity">
@@ -269,19 +261,6 @@
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value=".ResultActivity"/>
-        </activity>
-        <activity
-            android:name="com.aspsine.multithreaddownload.demo.ui.activity.AppDetailActivity"
-            android:label="@string/title_activity_app_detail">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.aspsine.multithreaddownload.demo.ui.activity.AppListActivity"/>
-        </activity>
-        <activity android:name="booksearch.activities.BookDetailActivity"
-            android:label="@string/title_activity_book_detail">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ResultActivity"/>
         </activity>
         <!-- 音乐播放器界面 -->
         <activity

@@ -1,6 +1,5 @@
 package com.aspsine.multithreaddownload.demo.ui.adapter;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import com.aspsine.multithreaddownload.demo.entity.AppInfo;
 import com.aspsine.multithreaddownload.demo.listener.OnItemClickListener;
-import com.aspsine.multithreaddownload.demo.ui.activity.AppDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -22,9 +20,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import hitamigos.sourceget.R;
 
-/**
- * Created by Aspsine on 2015/7/8.
- */
 public class ListViewAdapter extends BaseAdapter {
 
     private List<AppInfo> mAppInfos;
@@ -84,14 +79,14 @@ public class ListViewAdapter extends BaseAdapter {
                 }
             }
         });
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), AppDetailActivity.class);
-                intent.putExtra("EXTRA_APPINFO", mAppInfos.get(position));
-                v.getContext().startActivity(intent);
-            }
-        });
+//        convertView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(v.getContext(), AppDetailActivity.class);
+//                intent.putExtra("EXTRA_APPINFO", mAppInfos.get(position));
+//                v.getContext().startActivity(intent);
+//            }
+//        });
         return convertView;
     }
 

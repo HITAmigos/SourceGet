@@ -11,16 +11,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:padding="5dp">
-
-        <ImageButton
-            android:id="@+id/music_btn_restart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:background="@null"
-            android:src="@drawable/music_controller_restart_selector"/>
-
         <ImageButton
             android:id="@+id/music_btn_prev"
             android:layout_width="wrap_content"
@@ -44,14 +34,6 @@
             android:layout_weight="1"
             android:background="@null"
             android:src="@drawable/music_controller_next_selector"/>
-
-        <ImageButton
-            android:id="@+id/music_btn_mode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@null"
-            android:src="@drawable/music_controller_random_selector"/>
     </LinearLayout>
 
     <LinearLayout

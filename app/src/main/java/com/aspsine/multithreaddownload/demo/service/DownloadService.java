@@ -3,6 +3,7 @@ package com.aspsine.multithreaddownload.demo.service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
@@ -10,13 +11,12 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.aspsine.multithreaddownload.CallBack;
-import com.aspsine.multithreaddownload.DownloadException;
-import com.aspsine.multithreaddownload.DownloadManager;
-import com.aspsine.multithreaddownload.DownloadRequest;
 import com.aspsine.multithreaddownload.demo.entity.AppInfo;
 import com.aspsine.multithreaddownload.demo.util.Utils;
-import com.aspsine.multithreaddownload.util.L;
+import com.gewaradown.CallBack;
+import com.gewaradown.DownloadException;
+import com.gewaradown.DownloadManager;
+import com.gewaradown.DownloadRequest;
 
 import java.io.File;
 
@@ -44,16 +44,12 @@ public class DownloadService extends Service {
     public static final String EXTRA_TAG = "extra_tag";
 
     public static final String EXTRA_APP_INFO = "extra_app_info";
-
     /**
      * Dir: /Download
      */
     private File mDownloadDir;
-
     private DownloadManager mDownloadManager;
-
     private NotificationManagerCompat mNotificationManager;
-
     public static void intentDownload(Context context, int position, String tag, AppInfo info) {
         Intent intent = new Intent(context, DownloadService.class);
         intent.setAction(ACTION_DOWNLOAD);
@@ -62,29 +58,24 @@ public class DownloadService extends Service {
         intent.putExtra(EXTRA_APP_INFO, info);
         context.startService(intent);
     }
-
     public static void intentPause(Context context, String tag) {
         Intent intent = new Intent(context, DownloadService.class);
         intent.setAction(ACTION_PAUSE);
         intent.putExtra(EXTRA_TAG, tag);
         context.startService(intent);
     }
-
     public static void intentPauseAll(Context context) {
         Intent intent = new Intent(context, DownloadService.class);
         context.startService(intent);
     }
-
     public static void destory(Context context) {
         Intent intent = new Intent(context, DownloadService.class);
         context.stopService(intent);
     }
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
@@ -112,16 +103,14 @@ public class DownloadService extends Service {
         }
         return super.onStartCommand(intent, flags, startId);
     }
-
     private void download(final int position, final AppInfo appInfo, String tag) {
         final DownloadRequest request = new DownloadRequest.Builder()
-                .setName(appInfo.getName() + ".apk")
+                .setName(appInfo.getName())
                 .setUri(appInfo.getUrl())
                 .setFolder(mDownloadDir)
                 .build();
         mDownloadManager.download(request, tag, new DownloadCallBack(position, appInfo, mNotificationManager, getApplicationContext()));
     }
-
     private void pause(String tag) {
         mDownloadManager.pause(tag);
     }
@@ -162,10 +151,9 @@ public class DownloadService extends Service {
 
         @Override
         public void onStarted() {
-            L.i(TAG, "onStart()");
             mBuilder.setSmallIcon(R.drawable.currents)
                     .setContentTitle(mAppInfo.getName())
-                    .setContentText("Init Download")
+                    .setContentText("下载初始化！")
                     .setProgress(100, 0, true)
                     .setTicker("Start download " + mAppInfo.getName());
             updateNotification();
@@ -173,8 +161,7 @@ public class DownloadService extends Service {
 
         @Override
         public void onConnecting() {
-            L.i(TAG, "onConnecting()");
-            mBuilder.setContentText("Connecting")
+            mBuilder.setContentText("连接中……")
                     .setProgress(100, 0, true);
             updateNotification();
 
@@ -184,8 +171,7 @@ public class DownloadService extends Service {
 
         @Override
         public void onConnected(long total, boolean isRangeSupport) {
-            L.i(TAG, "onConnected()");
-            mBuilder.setContentText("Connected")
+            mBuilder.setContentText("已连接！")
                     .setProgress(100, 0, true);
             updateNotification();
         }
@@ -196,53 +182,43 @@ public class DownloadService extends Service {
             if (mLastTime == 0) {
                 mLastTime = System.currentTimeMillis();
             }
-
             mAppInfo.setStatus(AppInfo.STATUS_DOWNLOADING);
             mAppInfo.setProgress(progress);
             mAppInfo.setDownloadPerSize(Utils.getDownloadPerSize(finished, total));
-
             long currentTime = System.currentTimeMillis();
             if (currentTime - mLastTime > 500) {
-                L.i(TAG, "onProgress()");
-                mBuilder.setContentText("Downloading");
+                mBuilder.setContentText("正在下载……");
                 mBuilder.setProgress(100, progress, false);
                 updateNotification();
-
                 sendBroadCast(mAppInfo);
-
                 mLastTime = currentTime;
             }
         }
-
         @Override
-        public void onCompleted() {
-            L.i(TAG, "onCompleted()");
-            mBuilder.setContentText("Download Complete");
+        public void onCompleted(){
+            mBuilder.setContentText("下载完成！");
             mBuilder.setProgress(0, 0, false);
             mBuilder.setTicker(mAppInfo.getName() + " download Complete");
             updateNotification();
-
             mAppInfo.setStatus(AppInfo.STATUS_COMPLETE);
             mAppInfo.setProgress(100);
+            SQLiteDatabase db = SQLiteDatabase.openDatabase("/data/data/hitamigos.sourceget/databases/downloadinfo.db", null, SQLiteDatabase.OPEN_READONLY);
+            db.delete("download","link = \'"+mAppInfo.getUrl()+"\'",null);
             sendBroadCast(mAppInfo);
         }
-
         @Override
-        public void onDownloadPaused() {
-            L.i(TAG, "onDownloadPaused()");
-            mBuilder.setContentText("Download Paused");
+        public void onDownloadPaused(){
+            mBuilder.setContentText("下载暂停！");
             mBuilder.setTicker(mAppInfo.getName() + " download Paused");
             mBuilder.setProgress(100, mAppInfo.getProgress(), false);
             updateNotification();
-
             mAppInfo.setStatus(AppInfo.STATUS_PAUSED);
             sendBroadCast(mAppInfo);
         }
 
         @Override
         public void onDownloadCanceled() {
-            L.i(TAG, "onDownloadCanceled()");
-            mBuilder.setContentText("Download Canceled");
+            mBuilder.setContentText("下载取消！");
             mBuilder.setTicker(mAppInfo.getName() + " download Canceled");
             updateNotification();
 
@@ -261,10 +237,9 @@ public class DownloadService extends Service {
         }
 
         @Override
-        public void onFailed(DownloadException e) {
-            L.i(TAG, "onFailed()");
+        public void onFailed(DownloadException e){
             e.printStackTrace();
-            mBuilder.setContentText("Download Failed");
+            mBuilder.setContentText("下载失败！");
             mBuilder.setTicker(mAppInfo.getName() + " download failed");
             mBuilder.setProgress(100, mAppInfo.getProgress(), false);
             updateNotification();
@@ -272,11 +247,9 @@ public class DownloadService extends Service {
             mAppInfo.setStatus(AppInfo.STATUS_DOWNLOAD_ERROR);
             sendBroadCast(mAppInfo);
         }
-
         private void updateNotification() {
             mNotificationManager.notify(mPosition + 1000, mBuilder.build());
         }
-
         private void sendBroadCast(AppInfo appInfo) {
             Intent intent = new Intent();
             intent.setAction(DownloadService.ACTION_DOWNLOAD_BROAD_CAST);
@@ -285,7 +258,6 @@ public class DownloadService extends Service {
             mLocalBroadcastManager.sendBroadcast(intent);
         }
     }
-
     @Override
     public void onCreate() {
         super.onCreate();

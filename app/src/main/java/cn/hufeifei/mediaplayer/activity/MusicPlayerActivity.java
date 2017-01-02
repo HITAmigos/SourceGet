@@ -77,11 +77,7 @@ public class MusicPlayerActivity extends Activity implements ServiceConnection {
     @ViewInject(R.id.music_viewPager)
     private ViewPager musicViewPager;
 
-    @ViewInject(R.id.music_radioGroup)
-    private RadioGroup musicRadioGroup;
 
-    @ViewInject(R.id.music_btn_restart)
-    private ImageButton musicBtnRestart;
 
     @ViewInject(R.id.music_btn_prev)
     private ImageButton musicBtnPrev;
@@ -92,8 +88,6 @@ public class MusicPlayerActivity extends Activity implements ServiceConnection {
     @ViewInject(R.id.music_btn_next)
     private ImageButton musicBtnNext;
 
-    @ViewInject(R.id.music_btn_mode)
-    private ImageButton musicBtnMode;
 
     @ViewInject(R.id.music_currProgress)
     private TextView musicCurrProgress;
@@ -168,8 +162,6 @@ public class MusicPlayerActivity extends Activity implements ServiceConnection {
         musicViewPager.setAdapter(new MusicItemPageAdapter(getFragmentManager()));
         MusicPageListener musicPageListener = new MusicPageListener();
         musicViewPager.addOnPageChangeListener(musicPageListener);
-        musicRadioGroup.setOnCheckedChangeListener(musicPageListener);
-        musicRadioGroup.check(R.id.radioBtn2);
     }
 
     private class MusicPageListener implements ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener {
@@ -181,13 +173,6 @@ public class MusicPlayerActivity extends Activity implements ServiceConnection {
 
         @Override
         public void onPageSelected(int position) {
-            switch (position) {
-
-                case 1:
-                    musicRadioGroup.check(R.id.radioBtn2);
-                    break;
-
-            }
         }
 
         @Override
@@ -197,12 +182,9 @@ public class MusicPlayerActivity extends Activity implements ServiceConnection {
 
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
-            switch (checkedId) {
 
-                case R.id.radioBtn2:
                     musicViewPager.setCurrentItem(1);
-                    break;
-            }
+
         }
     }
 
@@ -386,7 +368,6 @@ public class MusicPlayerActivity extends Activity implements ServiceConnection {
         //设置进度条当前位置
         musicSeekBar.setProgress(musicService.getCurrentPosition());
         //初始化音乐播放模式
-        setPlayModeImg();
     }
 
     /**
@@ -401,38 +382,15 @@ public class MusicPlayerActivity extends Activity implements ServiceConnection {
         }
     }
 
-    /**
-     * 设置播放模式按钮的图标
-     */
-    private void setPlayModeImg(){
-        switch (musicService.getPlayMode()){
-            case 1:
-                //随机播放
-                musicBtnMode.setImageResource(R.drawable.music_controller_random_selector);
-                break;
-            case 2:
-                //列表播放
-                musicBtnMode.setImageResource(R.drawable.music_controller_repeat_all_selector);
-                break;
-            case 0:
-                //单曲循环
-                musicBtnMode.setImageResource(R.drawable.music_controller_repeat_single_selector);
-                break;
-        }
-    }
-
     @Event(value = {                //使用xUtils注入事件
             R.id.music_btn_return,  //返回按钮
-            R.id.music_btn_restart, //
             R.id.music_btn_prev,    //上一曲按钮
             R.id.music_btn_continue,//暂停或继续按钮
             R.id.music_btn_next,    //下一曲按钮
-            R.id.music_btn_mode     //播放模式按钮
     })
     private void onClick(View view) {
         if (view == musicBtnReturn) {
             this.finish();
-        } else if (view == musicBtnRestart) {
         } else if (view == musicBtnPrev) {
             musicService.prev();
         } else if (view == musicBtnContinue) {
@@ -446,10 +404,6 @@ public class MusicPlayerActivity extends Activity implements ServiceConnection {
             }
         } else if (view == musicBtnNext) {
             musicService.next();
-        } else if (view == musicBtnMode) {
-            //因为只有三种模式的取值为0x0001~0x0003
-            musicService.setPlayMode((musicService.getPlayMode() + 1) % 3 + 1);
-            setPlayModeImg();
         }
     }
 

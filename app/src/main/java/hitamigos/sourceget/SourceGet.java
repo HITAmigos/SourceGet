@@ -9,9 +9,9 @@ package hitamigos.sourceget;
 import android.app.Application;
 import android.content.Context;
 
-import com.aspsine.multithreaddownload.DownloadConfiguration;
-import com.aspsine.multithreaddownload.DownloadManager;
 import com.aspsine.multithreaddownload.demo.CrashHandler;
+import com.gewaradown.DownloadConfiguration;
+import com.gewaradown.DownloadManager;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.StorageUtils;

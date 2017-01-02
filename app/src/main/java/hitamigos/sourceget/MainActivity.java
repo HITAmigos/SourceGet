@@ -83,9 +83,6 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 intent = new Intent(this,cn.hufeifei.mediaplayer.activity.MainActivity.class);
                 break;
-            case 3:
-                intent = new Intent(this,hitamigos.search.SearchActivity.class);
-                break;
             default:
                 break;
         }

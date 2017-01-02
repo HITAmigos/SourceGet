@@ -2,9 +2,7 @@ package com.aspsine.multithreaddownload.demo.entity;
 
 import java.io.Serializable;
 
-/**
- * Created by Aspsine on 2015/7/8.
- */
+
 public class AppInfo implements Serializable {
     public static final int STATUS_NOT_DOWNLOAD = 0;
     public static final int STATUS_CONNECTING = 1;

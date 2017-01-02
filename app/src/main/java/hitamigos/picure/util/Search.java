@@ -89,7 +89,7 @@ public class Search {
     }
 
     public static void sop(Object obj) {
-        System.out.println(obj);
+      //  System.out.println(obj);
     }
 
     public StringBuilder GetUrl() {
@@ -226,11 +226,11 @@ public class Search {
                             if (temp.contains("thumbUrl")) {
                                 builder.append(temp.substring(temp.lastIndexOf("\"thumbUrl\":\"")).substring(12));
                                 count++;
-                                System.out.println(temp.substring(temp.lastIndexOf("\"thumbUrl\":\"")).substring(12));
+                             //   System.out.println(temp.substring(temp.lastIndexOf("\"thumbUrl\":\"")).substring(12));
                             } else {
                                 builder.append(temp.substring(1));
                                 count++;
-                                System.out.println(temp.substring(1));
+                             //   System.out.println(temp.substring(1));
 
                             }
                         }

@@ -14,8 +14,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:src="@drawable/ic_launcher"/>
+            android:padding="20dp"/>
 
         <ListView
             android:id="@+id/menu_btn_list"

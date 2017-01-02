@@ -38,13 +38,11 @@ public class CrashHandler implements UncaughtExceptionHandler {
 
     private CrashHandler() {
     }
-
     private CrashHandler(Context context) {
         mContext = context;
         mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
     }
-
     public static CrashHandler getInstance(Context context) {
         if (instance == null) {
             synchronized (CrashHandler.class) {
@@ -71,7 +69,6 @@ public class CrashHandler implements UncaughtExceptionHandler {
     }
 
     private boolean handleException(final Throwable ex) {
-
         // 如果是调试状态则不生成异常文件，让系统默认的异常处理器来处理
         if (Debug.isDebuggerConnected())
             return false;
@@ -83,7 +80,6 @@ public class CrashHandler implements UncaughtExceptionHandler {
         saveCrashInfo2File(ex);
         return true;
     }
-
     private void collectDeviceInfo(Context ctx) {
         try {
             PackageManager pm = ctx.getPackageManager();

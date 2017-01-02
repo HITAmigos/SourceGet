@@ -44,5 +44,8 @@
     <string name="bookname">书籍信息</string>
     <string name="bookdetails">比价查询</string>
     <string name="picturedetails">图片详情</string>
-
+    <string name="network_unavailable">噢&#8230;连不上网了</string>
+    <string name="search_bar_hint">书名/作者</string>
+    <string name="search_button">搜索</string>
+    <string name="content_description">"豆瓣图书"</string>
 </resources>

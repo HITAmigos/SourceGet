@@ -16,13 +16,13 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/ivBookCover"
+                android:id="@+id/BookCover"
                 android:layout_marginTop="8dp"
                 android:layout_width="280dp"
                 android:layout_height="280dp" />
 
             <TextView
-                android:id="@+id/tvTitle"
+                android:id="@+id/Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="32sp"
@@ -31,7 +31,7 @@
                 android:paddingRight="10dp" />
 
             <TextView
-                android:id="@+id/tvAuthor"
+                android:id="@+id/Author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="22sp"
@@ -47,20 +47,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Published By"
+                android:text="出版信息："
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/tvPublisher"
+                android:id="@+id/Publisher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp" />
-
             <TextView
-                android:id="@+id/tvPageCount"
+                android:id="@+id/PubDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:textSize="14sp" />
         </LinearLayout>
     </ScrollView>

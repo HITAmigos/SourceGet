@@ -6,7 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 
-import com.aspsine.multithreaddownload.util.ListUtils;
+import com.gewaradown.util.ListUtils;
 
 import java.io.File;
 import java.text.DecimalFormat;

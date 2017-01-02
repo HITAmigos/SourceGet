@@ -13,7 +13,6 @@
     tools:context=".MainActivity">
     <android.support.design.widget.TabLayout
         android:id="@+id/id_tl"
-
         android:layout_height="wrap_content"
         app:tabIndicatorColor="#ff0900"
         app:tabSelectedTextColor="#ffaa00"
