@@ -29,6 +29,7 @@ public class BookInfoDetailActivity extends Activity {
 	private TextView mSummary;
 	private Button mButton;
 	private ProgressDialog mProgressDialog;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -36,6 +37,9 @@ public class BookInfoDetailActivity extends Activity {
 		setContentView(R.layout.book_info_detail_activity);
 		initViews();
 		initData(getIntent().getParcelableExtra(BookInfo.class.getName()));
+
+
+
 	}
 	
 	private void initViews(){

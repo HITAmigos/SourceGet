@@ -83,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 intent = new Intent(this,cn.hufeifei.mediaplayer.activity.MainActivity.class);
                 break;
+            case 3:
+                intent = new Intent(this,com.example.administrator.robot.MainActivity.class);
+                break;
             default:
                 break;
         }
@@ -94,12 +97,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.search);
         initSpeech();
         EditText editText = (EditText)findViewById(R.id.edit_message);
-//        editText.setOnClickListener(new Button.OnClickListener(){//创建监听
-//            public void onClick(View v) {
-//                Jump(3);
-//            }
-//        });
-
         editText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -125,6 +122,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
+            case R.id.chat:
+                Toast.makeText(MainActivity.this, ""+"正在前往聊天页！", Toast.LENGTH_SHORT).show();
+                Jump(3);
+                break;
             case R.id.scan:
                 startScanner();
                 break;

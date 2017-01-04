@@ -9,6 +9,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="uno.meng.download.MainActivity" >
     <item
+        android:id="@+id/chat"
+        android:icon="@drawable/chat"
+        app:showAsAction="always"
+        android:title="@string/app_name"/>
+    <item
         android:id="@+id/scan"
         android:icon="@drawable/scan"
         app:showAsAction="always"

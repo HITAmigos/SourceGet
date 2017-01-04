@@ -248,6 +248,14 @@
             android:value=".MainActivity"/>
         </activity>
         <activity
+            android:name="com.example.administrator.robot.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
+        <activity
             android:name=".activity.LatestContentActivity"
             android:label="@string/newsdetails"
             android:parentActivityName=".activity.MainActivity">

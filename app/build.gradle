@@ -6,7 +6,7 @@ android {
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "hitamigos.sourceget"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -56,4 +56,7 @@ dependencies {
     compile files('libs/eventbus-3.0.0.jar')
     compile 'org.xutils:xutils:3.3.22'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha1'
+    compile files('commons-codec-1.6.jar')
+    compile files('commons-httpclient-3.1.jar')
+    compile files('commons-logging-1.1.1.jar')
 }

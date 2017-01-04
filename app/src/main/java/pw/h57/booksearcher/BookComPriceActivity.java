@@ -17,14 +17,15 @@ import hitamigos.sourceget.R;
 public class BookComPriceActivity extends Activity {
 	
 	private ListView list;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.book_com_price);
-		
-		
+
+
+
 		init();
 	}
 
