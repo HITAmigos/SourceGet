@@ -33,10 +33,19 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.aspsine.multithreaddownload.demo.ui.activity.AppListActivity;
+import com.loopj.android.http.HttpGet;
 import com.weebly.linzhaoqin.booksearch.HttpManagerDouban;
 import com.weebly.linzhaoqin.model.Book;
 import com.weebly.linzhaoqin.model.BookAdapter;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -65,15 +74,16 @@ public class ResultActivity extends AppCompatActivity {
     private ImageLoader mImageLoader;
     private Handler UIHandler = new Handler();
     List<com.weebly.linzhaoqin.model.Book> bookList;
+
     String uri;
     String s;
     /*
     远程连接
      */
-    private static  String processURL="http://192.168.134.1:8080/AndroidStruts2JSON/login.action?";
+    private static  String processURL="http://101.200.55.219:8080/SourceOffer/Client/getAll.action?";
     @Override
     protected void onCreate(Bundle savedInstanceState){
-        liststr = "video,视频1,link1,视频2,link2,music,音乐1,link3,等你等了那么久,http://music.baidutt.com/up/kwcswcwc/uyuuuy.mp3";
+     //   liststr = "video,视频1,link1,视频2,link2,music,音乐1,link3,等你等了那么久,http://music.baidutt.com/up/kwcswcwc/uyuuuy.mp3";
         ///在Android2.2以后必须添加以下代码
         //本应用采用的Android4.0
         //设置线程的策略
@@ -98,8 +108,12 @@ public class ResultActivity extends AppCompatActivity {
         if(mess != null){
             message = mess;
         }
-    //    GetData(message);
+        GetData(message);
+//        System.out.println(liststr);
         final String[] str = liststr.split("\\,");
+//        for(int i =0;i<str.length;i++){
+//            System.out.println(str[i]);
+//        }
         int boundary = 0;
         for(int i =0;i<str.length;i++){
             if(str[i].equals("music")) boundary = i;
@@ -108,118 +122,123 @@ public class ResultActivity extends AppCompatActivity {
         /*
         视频
          */
+
             listView=new ListView(this);
-            List<Map<String, Object>> list=new ArrayList<>();
-            for (int j = 1; j < boundary; j++){
-                if(str[j].equals("video")) j++;
-                Map<String, Object> map=new HashMap<String, Object>();
+        if(!str[1].equals("music")) {
+            List<Map<String, Object>> list = new ArrayList<>();
+            for (int j = 1; j < boundary; j++) {
+                if (str[j].equals("video")) j++;
+                Map<String, Object> map = new HashMap<String, Object>();
                 map.put("image", R.drawable.video);
                 map.put("title", str[j]);
                 map.put("info", str[++j]);
                 list.add(map);
             }
             //生成SimpleAdapter适配器对象
-            SimpleAdapter mySimpleAdapter=new SimpleAdapter(this, list,//数据源
+            SimpleAdapter mySimpleAdapter = new SimpleAdapter(this, list,//数据源
                     R.layout.list,//ListView内部数据展示形式的布局文件
-                    new String[]{"image","title","info"},//HashMap中的两个key值
-                    new int[]{R.id.image,R.id.title,R.id.info});/*布局文件
+                    new String[]{"image", "title", "info"},//HashMap中的两个key值
+                    new int[]{R.id.image, R.id.title, R.id.info});/*布局文件
                                                             布局文件的各组件分别映射到HashMap的各元素上，完成适配*/
             listView.setAdapter(mySimpleAdapter);
             //添加点击事件
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3){
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                     //获得选中项的HashMap对象
-                   // Map<String,Object>  map=(Map<String,Object>)listView.getItemAtPosition(arg2);
-                    String title =str[arg2*2+1];
-                    String info = str[arg2*2+2];
-                    String sinfo = info.substring(0,4);
-                    if(sinfo.equals("http") || sinfo.equals("HTTP")){
+                    // Map<String,Object>  map=(Map<String,Object>)listView.getItemAtPosition(arg2);
+                    String title = str[arg2 * 2 + 1];
+                    String info = str[arg2 * 2 + 2];
+                    String sinfo = info.substring(0, 4);
+                    if (sinfo.equals("http") || sinfo.equals("HTTP")) {
 
-                        DBhelper db = new DBhelper(ResultActivity.this,"downloadinfo.db",null,1);
+                        DBhelper db = new DBhelper(ResultActivity.this, "downloadinfo.db", null, 1);
                         SQLiteDatabase mydb = db.getWritableDatabase();
 
-                        Cursor fila = mydb.rawQuery("select * from download where link=\'"+info+"\'", null);
-                        if(!fila.moveToFirst()) {  //devuelve true o false
+                        Cursor fila = mydb.rawQuery("select * from download where link=\'" + info + "\'", null);
+                        if (!fila.moveToFirst()) {  //devuelve true o false
                             ContentValues registro = new ContentValues();  //es una clase para guardar datos
                             registro.put("title", title);
                             registro.put("link", info);
                             mydb.insert("download", null, registro);
                             mydb.close();
                             Toast.makeText(getApplicationContext(),
-                                    "正在下载"+title+"！", Toast.LENGTH_SHORT).show();
-                        }
-                        else{
+                                    "正在下载" + title + "！", Toast.LENGTH_SHORT).show();
+                            Jump();
+                        } else {
                             mydb.close();
                             Toast.makeText(getApplicationContext(),
-                                    "已经在下载"+title+"！",
+                                    "已经在下载" + title + "！",
                                     Toast.LENGTH_SHORT).show();
                         }
-                    }else{
+                    } else {
                         Toast.makeText(getApplicationContext(),
-                                "无法下载"+title+"！",
+                                "无法下载" + title + "！",
                                 Toast.LENGTH_SHORT).show();
                     }
 
                 }
             });
+        }
         views.add(listView);
         /*
         音乐
          */
         listView=new ListView(this);
-        List<Map<String, Object>> list1=new ArrayList<>();
-        for (int j = boundary+1; j < str.length; j++){
-            if(str[j].equals("music")) j++;
-            Map<String, Object> map=new HashMap<String, Object>();
-            map.put("image", R.drawable.music);
-            map.put("title", str[j]);
-            map.put("info", str[++j]);
-            list1.add(map);
-        }
-        //生成SimpleAdapter适配器对象
-        SimpleAdapter myAdapter=new SimpleAdapter(this, list1,//数据源
-                R.layout.list,//ListView内部数据展示形式的布局文件
-                new String[]{"image","title","info"},//HashMap中的两个key值
-                new int[]{R.id.image,R.id.title,R.id.info});/*布局文件
+        if(!str[str.length-1].equals("music")) {
+            List<Map<String, Object>> list1 = new ArrayList<>();
+            for (int j = boundary + 1; j < str.length; j++){
+                if (str[j].equals("music")) j++;
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("image", R.drawable.music);
+                map.put("title", str[j]);
+                map.put("info", str[++j]);
+                list1.add(map);
+            }
+            //生成SimpleAdapter适配器对象
+            SimpleAdapter myAdapter = new SimpleAdapter(this, list1,//数据源
+                    R.layout.list,//ListView内部数据展示形式的布局文件
+                    new String[]{"image", "title", "info"},//HashMap中的两个key值
+                    new int[]{R.id.image, R.id.title, R.id.info});/*布局文件
                                                             布局文件的各组件分别映射到HashMap的各元素上，完成适配*/
-        listView.setAdapter(myAdapter);
-        //添加点击事件
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3){
-                //获得选中项的HashMap对象
-                String title =str[boun+arg2*2+1];
-                String info = str[boun+arg2*2+2];
-                System.out.println(title);
-                System.out.println(info);
-                String sinfo = info.substring(0,4);
-                if(sinfo.equals("http") || sinfo.equals("HTTP")){
-                    DBhelper db = new DBhelper(ResultActivity.this,"downloadinfo.db",null,1);
-                    SQLiteDatabase mydb = db.getWritableDatabase();
+            listView.setAdapter(myAdapter);
+            //添加点击事件
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                    //获得选中项的HashMap对象
+                    String title = str[boun + arg2 * 2 + 1];
+                    String info = str[boun + arg2 * 2 + 2];
+                    System.out.println(title);
+                    System.out.println(info);
+                    String sinfo = info.substring(0, 4);
+                    if (sinfo.equals("http") || sinfo.equals("HTTP")) {
+                        DBhelper db = new DBhelper(ResultActivity.this, "downloadinfo.db", null, 1);
+                        SQLiteDatabase mydb = db.getWritableDatabase();
 
-                    Cursor fila = mydb.rawQuery("select * from download where link=\'"+info+"\'", null);
-                    if(!fila.moveToFirst()) {  //devuelve true o false
-                        ContentValues registro = new ContentValues();  //es una clase para guardar datos
+                        Cursor fila = mydb.rawQuery("select * from download where link=\'" + info + "\'", null);
+                        if (!fila.moveToFirst()) {  //devuelve true o false
+                            ContentValues registro = new ContentValues();  //es una clase para guardar datos
 
-                        registro.put("title", title);
-                        registro.put("link", info);
-                        mydb.insert("download", null, registro);
-                        mydb.close();
+                            registro.put("title", title);
+                            registro.put("link", info);
+                            mydb.insert("download", null, registro);
+                            mydb.close();
+                            Toast.makeText(getApplicationContext(),
+                                    "正在下载" + title + "！", Toast.LENGTH_SHORT).show();
+                            Jump();
+                        } else {
+                            mydb.close();
+                            Toast.makeText(getApplicationContext(),
+                                    "已经在下载" + title + "！",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
                         Toast.makeText(getApplicationContext(),
-                                "正在下载"+title+"！", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        mydb.close();
-                        Toast.makeText(getApplicationContext(),
-                                "已经在下载"+title+"！",
+                                "无法下载" + title + "！",
                                 Toast.LENGTH_SHORT).show();
                     }
-                }else{
-                    Toast.makeText(getApplicationContext(),
-                            "无法下载"+title+"！",
-                            Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
+            });
+        }
         views.add(listView);
 
         LayoutInflater inflater = getLayoutInflater();
@@ -258,49 +277,46 @@ public class ResultActivity extends AppCompatActivity {
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(viewPager);
     }
-//    public void GetData(String message){
-//       // String result=null;
-//        try {
-//            //创建一个HttpClient对象
-//            HttpClient httpclient = new DefaultHttpClient();
-//            //远程登录URL
-//            processURL=processURL+"message="+message;
-//            Log.d("远程URL", processURL);
-//            //创建HttpGet对象
-//            HttpGet request=new HttpGet(processURL);
-//            //请求信息类型MIME每种响应类型的输出（普通文本、html 和 XML，json）。允许的响应类型应当匹配资源类中生成的 MIME 类型
-//            //资源类生成的 MIME 类型应当匹配一种可接受的 MIME 类型。如果生成的 MIME 类型和可接受的 MIME 类型不 匹配，那么将
-//            //生成 com.sun.jersey.api.client.UniformInterfaceException。例如，将可接受的 MIME 类型设置为 text/xml，而将
-//            //生成的 MIME 类型设置为 application/xml。将生成 UniformInterfaceException。
-//            request.addHeader("Accept","text/json");
-//            //获取响应的结果
-//            HttpResponse response =httpclient.execute(request);
-//            //获取HttpEntity
-//            HttpEntity entity=response.getEntity();
-//            //获取响应的结果信息
-//            String json = EntityUtils.toString(entity,"UTF-8");
-//            //JSON的解析过程
-//            if(json!=null){
+    public void GetData(String message){
+       // String result=null;
+        try {
+            //创建一个HttpClient对象
+            HttpClient httpclient = new DefaultHttpClient();
+            //远程登录URL
+            processURL=processURL+"key="+message;
+            //创建HttpGet对象
+            HttpGet request=new HttpGet(processURL);
+            //请求信息类型MIME每种响应类型的输出（普通文本、html 和 XML，json）。允许的响应类型应当匹配资源类中生成的 MIME 类型
+            //资源类生成的 MIME 类型应当匹配一种可接受的 MIME 类型。如果生成的 MIME 类型和可接受的 MIME 类型不 匹配，那么将
+            //生成 com.sun.jersey.api.client.UniformInterfaceException。例如，将可接受的 MIME 类型设置为 text/xml，而将
+            //生成的 MIME 类型设置为 application/xml。将生成 UniformInterfaceException。
+            request.addHeader("Accept","text/json");
+            //获取响应的结果
+            HttpResponse response =httpclient.execute(request);
+            //获取HttpEntity
+            HttpEntity entity=response.getEntity();
+            //获取响应的结果信息
+            String json = EntityUtils.toString(entity,"UTF-8");
+            //JSON的解析过程
+            if(json!=null){
 //                JSONObject jsonObject=new JSONObject(json);
-//                liststr=jsonObject.get("message").toString();
-//            }
-//        } catch (ClientProtocolException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (JSONException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//    }
+//                liststr=jsonObject.get("jsonBytes").toString();
+                liststr = json;
+            }
+        } catch (ClientProtocolException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
     // Executes an API call to the OpenLibrary search endpoint, parses the results
     // Converts them into an array of book objects and adds them to the adapter
     public void Jump(){
         Intent in = new Intent(this, AppListActivity.class);
         startActivity(in);
-        System.out.println("前往下载页");
+       // System.out.println("前往下载页");
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
