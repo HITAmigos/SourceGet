@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -80,7 +81,7 @@ public class ResultActivity extends AppCompatActivity {
     /*
     远程连接
      */
-    private static  String processURL="http://101.200.55.219:8080/SourceOffer/Client/getAll.action?";
+    private static  String processURL="http://123.206.93.251:8080/SourceOffer/Client/getAll.action?";
     @Override
     protected void onCreate(Bundle savedInstanceState){
      //   liststr = "video,视频1,link1,视频2,link2,music,音乐1,link3,等你等了那么久,http://music.baidutt.com/up/kwcswcwc/uyuuuy.mp3";
@@ -174,6 +175,10 @@ public class ResultActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),
                                 "无法下载" + title + "！",
                                 Toast.LENGTH_SHORT).show();
+                        String link = info;
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                        intent.addCategory("android.intent.category.DEFAULT");
+                        startActivity(intent);
                     }
 
                 }
@@ -235,6 +240,10 @@ public class ResultActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),
                                 "无法下载" + title + "！",
                                 Toast.LENGTH_SHORT).show();
+                        String link = info;
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                        intent.addCategory("android.intent.category.DEFAULT");
+                        startActivity(intent);
                     }
                 }
             });
@@ -302,6 +311,8 @@ public class ResultActivity extends AppCompatActivity {
 //                JSONObject jsonObject=new JSONObject(json);
 //                liststr=jsonObject.get("jsonBytes").toString();
                 liststr = json;
+            }else{
+                liststr = "video,music";
             }
         } catch (ClientProtocolException e) {
             // TODO Auto-generated catch block
