@@ -75,16 +75,14 @@ public class ResultActivity extends AppCompatActivity {
     private ImageLoader mImageLoader;
     private Handler UIHandler = new Handler();
     List<com.weebly.linzhaoqin.model.Book> bookList;
-
     String uri;
     String s;
     /*
     远程连接
      */
-    private static  String processURL="http://123.206.93.251:8080/SourceOffer/Client/getAll.action?";
+    private static  String processURL="http://123.206.93.251:8080/SourceOffer/getAll.action?";
     @Override
     protected void onCreate(Bundle savedInstanceState){
-     //   liststr = "video,视频1,link1,视频2,link2,music,音乐1,link3,等你等了那么久,http://music.baidutt.com/up/kwcswcwc/uyuuuy.mp3";
         ///在Android2.2以后必须添加以下代码
         //本应用采用的Android4.0
         //设置线程的策略
@@ -112,9 +110,9 @@ public class ResultActivity extends AppCompatActivity {
         GetData(message);
 //        System.out.println(liststr);
         final String[] str = liststr.split("\\,");
-//        for(int i =0;i<str.length;i++){
-//            System.out.println(str[i]);
-//        }
+        for(int i =0;i<str.length;i++){
+            System.out.println(str[i]);
+        }
         int boundary = 0;
         for(int i =0;i<str.length;i++){
             if(str[i].equals("music")) boundary = i;
