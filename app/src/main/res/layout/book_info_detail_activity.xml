@@ -34,39 +34,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/book_detail_title"
-            android:gravity="center"
-            />
+           android:layout_margin="10dp" />
         <TextView 
             android:id="@+id/book_detail_author"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/book_detail_cover"
             android:layout_marginBottom="2dp" />
         <TextView 
             android:id="@+id/book_detail_publisher"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/book_detail_author"
             android:layout_marginBottom="2dp"
             />
         <TextView 
             android:id="@+id/book_detail_pubdate"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/book_detail_publisher"
             android:layout_marginBottom="2dp"
             />
         <TextView 
             android:id="@+id/book_detail_isbn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/book_detail_pubdate"
-            android:layout_marginBottom="2dp"
-            />
+            android:layout_marginBottom="2dp" />
 
         <TextView
             android:id="@+id/book_detail_summary_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/book_detail_isbn"
             android:layout_marginTop="16dp"
@@ -80,7 +78,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/book_detail_summary_title"
             />
-
         <Button
             android:id="@+id/book_search_price"
             android:layout_width="match_parent"
@@ -91,6 +88,7 @@
             android:layout_marginBottom="5dp"
             android:layout_below="@id/book_detail_summary"
             android:text="@string/book_search_price"
+            android:background="@color/cardview_dark_background"
             style="@style/Widget.AppCompat.Button.Colored" />
     </RelativeLayout>
 </ScrollView>

@@ -173,7 +173,7 @@ public class LatestContentActivity extends AppCompatActivity implements RevealBa
     }
 
     public void Speak(String title, String text) {
-        String mess = "正在阅读的文章标题为" + title + "文章正文为" + text;
+        String mess = "正在阅读的文章标题为" + title;
         speekText(mess);
     }
     public String getTitles(){
