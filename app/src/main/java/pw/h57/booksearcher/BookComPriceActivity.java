@@ -3,7 +3,6 @@ package pw.h57.booksearcher;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +22,8 @@ public class BookComPriceActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.book_com_price);
-
-
-
 		init();
 	}
-
 	private void init() {
 		// TODO Auto-generated method stub
 		list = (ListView) findViewById(R.id.list);
@@ -36,9 +31,6 @@ public class BookComPriceActivity extends Activity {
 		BookPrice[] bookPrices = new BookPrice[getIntent().getIntExtra("size", 1)];
 		for(int i = 0 ; i< getIntent().getIntExtra("size", 1); i++){
 			bookPrices[i] = getIntent().getParcelableExtra("bookPrice" + i);
-			Log.v("AAAAA", bookPrices[i].getmTitle());
-			Log.v("AAAAA", bookPrices[i].getmPrice());
-			Log.v("AAAAA", bookPrices[i].getmSavePrice());
 		}
 		list.setAdapter(new MyAdapter(bookPrices));
 	}
@@ -64,7 +56,6 @@ public class BookComPriceActivity extends Activity {
 			// TODO Auto-generated method stub
 			return position;
 		}
-
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub

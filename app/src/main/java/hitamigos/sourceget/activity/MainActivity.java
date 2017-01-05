@@ -19,8 +19,6 @@ public class MainActivity extends AppCompatActivity {
     private String curId;
     private CacheDbHelper dbHelper;
     private SharedPreferences sp;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         initView();
         loadLatest();
     }
-
     public void loadLatest() {
         getSupportFragmentManager().beginTransaction().
                 setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left).
@@ -38,18 +35,15 @@ public class MainActivity extends AppCompatActivity {
                 commit();
         curId = "latest";
     }
-
     public void setCurId(String id) {
         curId = id;
     }
-
     private void initView() {
         sr = (SwipeRefreshLayout) findViewById(R.id.sr);
         sr.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
         sr.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -58,9 +52,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         fl_content = (FrameLayout) findViewById(R.id.fl_content);
-
     }
-
     public void replaceFragment() {
         if (curId.equals("latest")) {
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
@@ -71,20 +63,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
     public void setSwipeRefreshEnable(boolean enable) {
         sr.setEnabled(enable);
     }
-
-
     public CacheDbHelper getCacheDbHelper() {
         return dbHelper;
     }
-
     @Override
     public void onBackPressed() {
-
-            long secondTime = System.currentTimeMillis();
+        long secondTime = System.currentTimeMillis();
             if (secondTime - firstTime > 2000) {
                 Snackbar sb = Snackbar.make(fl_content, "再按一次退出", Snackbar.LENGTH_SHORT);
                 sb.getView().setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark ));
@@ -94,6 +81,4 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }
-
-
 }
